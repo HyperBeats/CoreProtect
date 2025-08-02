@@ -26,3 +26,13 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build
         run: mvn -B verify
+      - name: Push build artifact
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          cp target/*.jar ./  # Copie l'artefact (ajuste le chemin/nom selon ton projet)
+          git add *.jar
+          git commit -m "Add build artifact from Maven verify"
+          git push origin master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
